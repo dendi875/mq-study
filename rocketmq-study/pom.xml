@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<parent>
+		<groupId>com.zq</groupId>
+		<artifactId>mq-study</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>rocketmq-study</artifactId>
+	<packaging>jar</packaging>
+
+	<name>rocketmq-study</name>
+
+
+	<!--
+  不必写 <build><plugins>...</plugins>，
+  因为父项目 <pluginManagement> 中已经统一配置了
+  spring-boot-maven-plugin、maven-compiler-plugin 等
+-->
+</project>

@@ -1,0 +1,116 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+<!--  通过将项目的父 POM 设置为 spring-boot-starter-parent，-->
+<!--  你可以自动获得 Spring Boot 提供的一系列默认配置。包括插件管理、资源过滤、默认依赖版本、打包配置等。-->
+<!--  这样可以减少子模块中重复配置的代码，也保证了 Spring Boot 各个组件之间的版本协调。-->
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.5.14</version>
+    <!--    该标签表示不使用本地相对路径查找父 POM，而是直接从远程仓库中查找（通常是 Maven 中央仓库）。-->
+    <!--    这避免了找不到父 POM 的问题，同时保持项目结构的简洁。-->
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
+  <groupId>com.zq</groupId>
+  <artifactId>mq-study</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>mq-study</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <java.version>1.8</java.version>
+
+    <!-- 设定源码/编译/输出的编码为UTF-8 -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+
+    <spring-boot.version>2.5.14</spring-boot.version>
+  </properties>
+
+  <modules>
+    <module>rocketmq-study</module>
+    <module>rabbitmq-study</module>
+    <module>kafka-study</module>
+    <module>pulsar-study</module>
+  </modules>
+
+  <!--
+  如果想在父级统一管理依赖的版本（BOM），可以使用 spring-boot-dependencies。
+  或者你也可以把 spring-boot-starter-parent 当作 BOM（importScope），
+  具体做法见“依赖管理”部分。下面给出常见的 BOM 方式。
+
+  spring-boot-dependencies 是一个 BOM（物料清单），它包含了 Spring Boot 生态中大量依赖的推荐版本。
+  通过导入这个 BOM，你可以在子模块中引入各种依赖时不用显式指定版本号，Maven 会自动从 BOM 中获取相应的版本。
+  这样可以确保依赖间版本的兼容性和一致性。
+
+  <scope>import</scope> 与 <type>pom</type>：
+这两个属性表明这个依赖是一个 BOM，它的作用是导入一整套依赖管理配置，而不是把它作为普通的依赖加入项目。
+导入 BOM 后，在 <dependencies> 中声明的依赖如果没有指定版本号，会自动使用 BOM 中定义的版本
+-->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
+<!--      <dependency>-->
+<!--        <groupId>org.apache.rocketmq</groupId>-->
+<!--        <artifactId>rocketmq-spring-boot-starter</artifactId>-->
+<!--        <version>2.2.0</version>-->
+<!--      </dependency>-->
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- 这里不用写版本号，因为在父项目 dependencyManagement 里管理了 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <!-- Spring Boot Maven Plugin：子模块可直接用，不必重复声明版本 -->
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <!--
+			如果这里不指定<version>，则默认继承父<version> = 2.5.14，
+			也可显式写明 ${project.parent.version} 或 ${spring-boot.version}
+		  -->
+        </plugin>
+
+        <!-- Maven Compiler Plugin：统一管理编译级别、编码 -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
+            <encoding>${project.build.sourceEncoding}</encoding>
+          </configuration>
+        </plugin>
+
+        <!-- 如需 Surefire 或 Failsafe 插件也可在此统一管理 -->
+        <!--
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<version>2.22.2</version>
+		</plugin>
+		-->
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
